@@ -72,6 +72,12 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <template v-for="article in articles">
+      　タイトル:{{article.title}}
+        本文:{{article.description}}
+        カテゴリー:{{article.category[0]}}
+        作成日{{article.createdAt}}
+      </template>
     </v-col>
   </v-row>
 </template>
@@ -79,8 +85,26 @@
 <script>
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import axios from 'axios'
 
 export default {
+  data() {
+    return {
+      articles: [],
+      url: 'https://sui.microcms.io/api/v1/article'
+    }
+  },
+  async asyncData() {
+    const { data } = await axios.get(
+      "https://sui.microcms.io/api/v1/article",
+      {
+        headers: { "X-API-KEY": "24935918-9e1e-4ee6-b7d0-323219cc2bf4" }
+      }
+    );
+    return {
+      articles: data.contents
+    };
+  },
   components: {
     Logo,
     VuetifyLogo
